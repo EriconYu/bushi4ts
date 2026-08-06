@@ -1,3 +1,7 @@
+// Copyright (c) 2026 不惑之心 (buhuo.xin)
+// 作者：净志 | 微信：haitaojingzhi | 官网：https://www.buhuo.xin
+// 仅开源排盘算法，不含卦爻辞、解卦等内容。
+
 import { DivinationContext, PaipanResult, GuaInfo } from './types';
 import { YAO_LAO_YANG, YAO_LAO_YIN } from './types';
 import { yaosToBaGuaNum, yaoToYinYang, guaNumToName, guaNumToWuXing, getZhiIndex, GUAS64 } from './gua_data';

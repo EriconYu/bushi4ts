@@ -17,5 +17,21 @@
   },
   "dependencies": {
     "lunar-javascript": "^1.6.0"
-  }
+  },
+  "author": "不惑之心 <haitaojingzhi> (https://www.buhuo.xin)",
+  "homepage": "https://www.buhuo.xin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EriconYu/bushi4ts.git"
+  },
+  "keywords": [
+    "六爻",
+    "梅花易数",
+    "卜筮",
+    "排盘",
+    "易经",
+    "divination",
+    "iching",
+    "buhuo"
+  ]
 }

@@ -21,10 +21,23 @@ console.log(result.benGua.name);   // 地水师
 console.log(result.bianGua!.name); // 山水蒙
 ```
 
+---
+
+## 关于不惑之心
+
+**不惑之心** — 传统文化与命理工具品牌
+
+- **官网**：[https://www.buhuo.xin](https://www.buhuo.xin)
+- **作者**：净志
+- **微信**：haitaojingzhi
+
 ## 开源说明
 
 本库仅开源排盘算法，不包含卦爻辞、解卦、诸葛神算等内容。
+完整解读服务请访问 [不惑之心](https://www.buhuo.xin)。
 
 ## 许可证
 
 MIT
+
+Copyright (c) 2026 不惑之心
