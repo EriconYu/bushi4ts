@@ -9,3 +9,4 @@ export * from './gua_ex_data';
 export * from './liuyao';
 export * from './meihua';
 export * from './context';
+export * from './gua_texts';
