@@ -1,0 +1,21 @@
+{
+  "name": "bushi4ts",
+  "version": "0.1.0",
+  "description": "卜筮 — TypeScript 六爻/梅花易数排盘引擎",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0"
+  },
+  "dependencies": {
+    "lunar-javascript": "^1.6.0"
+  }
+}
