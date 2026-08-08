@@ -8,6 +8,7 @@ import { baGuaNumToYaos, yaosToBaGuaNum, yaoToYinYang, guaNumToName, guaNumToWuX
 import { getHuGuaYaos, getBianGuaYaos, get64GuaNameByYaos } from './gua_calc';
 import { getGuaEx, reloadLiuQin, getLiuShen } from './gua_ex_data';
 
+/** 构建完整六爻排盘；bianPos 使用 0=上爻、5=初爻、-1=无动爻。 */
 export function buildLiuyaoResult(ctx: DivinationContext, shangGua: number, xiaGua: number, bianPos: number, method: string): PaipanResult {
   const shang = baGuaNumToYaos(shangGua);
   const xia = baGuaNumToYaos(xiaGua);
@@ -75,6 +76,11 @@ export function liuYaoSuiJiQiGua(ctx: DivinationContext): PaipanResult {
   return liuYaoShuZiQiGua(ctx, [n0, n1, n2]);
 }
 
+/**
+ * 手摇起卦。yaos 必须按上爻到初爻传入。
+ * 铜钱记录若按初爻到上爻产生，调用前使用 `[...records].reverse()` 转换一次；
+ * 返回数组可直接从索引 0 向下渲染，不要再次反转。
+ */
 export function liuYaoShouYaoQiGua(ctx: DivinationContext, yaos: number[]): PaipanResult {
   const shangYY = [yaoToYinYang(yaos[2]), yaoToYinYang(yaos[1]), yaoToYinYang(yaos[0])];
   const xiaYY = [yaoToYinYang(yaos[5]), yaoToYinYang(yaos[4]), yaoToYinYang(yaos[3])];

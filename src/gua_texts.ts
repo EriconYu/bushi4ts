@@ -13,10 +13,12 @@ export interface GuaTexts {
 
 const _cache: Record<string, GuaTexts> = raw as unknown as Record<string, GuaTexts>;
 
+/** 按完整卦名同步读取内置文本；卦名不存在时返回 null，无需预加载。 */
 export function getGuaTexts(guaName: string): GuaTexts | null {
   return _cache[guaName] || null;
 }
 
+/** 返回内置的全部 64 卦文本。 */
 export function getAllGuaTexts(): Record<string, GuaTexts> {
   return _cache;
 }

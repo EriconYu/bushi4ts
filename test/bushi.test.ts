@@ -2,7 +2,7 @@
 // 作者：净志 | 微信：haitaojingzhi | 官网：https://www.buhuo.xin
 // 仅开源排盘算法，不含卦爻辞、解卦等内容。
 
-import { buildContext, liuYaoShiJianQiGua, meiHuaShiJianQiGua, liuYaoShouYaoQiGua, getBianGuaYaos, YAO_SHAO_YANG, YAO_LAO_YANG, guaExMap } from '../src';
+import { buildContext, liuYaoShiJianQiGua, meiHuaShiJianQiGua, liuYaoShouYaoQiGua, getBianGuaYaos, getGuaTexts, YAO_SHAO_YANG, YAO_SHAO_YIN, YAO_LAO_YANG, guaExMap, DivinationContext } from '../src';
 
 describe('bushi4ts', () => {
   test('GUAS64', () => {
@@ -48,5 +48,49 @@ describe('bushi4ts', () => {
     const yaos = [YAO_SHAO_YANG, YAO_SHAO_YANG, YAO_SHAO_YANG, YAO_SHAO_YANG, YAO_SHAO_YANG, YAO_SHAO_YANG];
     const result = liuYaoShouYaoQiGua(ctx, yaos);
     expect(result.benGua.name).toBe('乾为天');
+  });
+
+  test('标准装卦：山火贲三爻动变山雷颐', () => {
+    const ctx: DivinationContext = {
+      ganZhi: ['丙午', '丙申', '甲寅', '乙亥'], xunKong: '子丑',
+      lunarMonth: 6, lunarDay: 26,
+    };
+    const result = liuYaoShiJianQiGua(ctx);
+
+    expect(result.benGua).toEqual({ name: '山火贲', yaos: [1, 2, 2, 3, 2, 1] });
+    expect(result.bianGua).toEqual({ name: '山雷颐', yaos: [1, 2, 2, 2, 2, 1] });
+    expect(result.liuShen).toEqual(['玄武', '白虎', '螣蛇', '勾陈', '朱雀', '青龙']);
+    expect(result.benGuaEx).toMatchObject({
+      liuQin: '官财兄财兄官', shi: 6, ying: 3,
+      ganZhi: ['寅木', '子水', '戌土', '亥水', '丑土', '卯木'],
+      fuCang: [{ pos: 4, value: '子申金' }, { pos: 5, value: '父午火' }],
+    });
+    expect(result.bianGuaEx).toMatchObject({
+      liuQin: '官财兄兄官财', shi: 3, ying: 6,
+      fuCang: [{ pos: 2, value: '子巳火' }, { pos: 4, value: '官酉金' }],
+    });
+  });
+
+  test('手摇输入方向和多动爻契约', () => {
+    const ctx: DivinationContext = {
+      ganZhi: ['丙午', '丙申', '甲寅', '乙亥'], xunKong: '子丑',
+      lunarMonth: 6, lunarDay: 26,
+    };
+    const bottomUp = [YAO_SHAO_YANG, YAO_SHAO_YIN, YAO_LAO_YANG,
+      YAO_SHAO_YIN, YAO_SHAO_YIN, YAO_SHAO_YANG];
+    const standard = liuYaoShouYaoQiGua(ctx, [...bottomUp].reverse());
+    expect(standard.benGua.name).toBe('山火贲');
+    expect(standard.bianGua?.name).toBe('山雷颐');
+
+    const multiple = liuYaoShouYaoQiGua(ctx,
+      [YAO_LAO_YANG, 2, 2, YAO_LAO_YANG, 2, 1]);
+    expect(multiple.bianYao).toBe(0);
+    expect(multiple.bianGua?.yaos[0]).toBe(YAO_SHAO_YIN);
+    expect(multiple.bianGua?.yaos[3]).toBe(YAO_SHAO_YIN);
+  });
+
+  test('内置卦爻辞可直接读取', () => {
+    expect(getGuaTexts('乾为天')?.name).toBe('乾为天');
+    expect(getGuaTexts('不存在')).toBeNull();
   });
 });
