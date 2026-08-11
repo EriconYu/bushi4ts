@@ -21,6 +21,7 @@ export function meiHuaShiJianQiGua(ctx: DivinationContext): PaipanResult {
   return buildLiuyaoResult(ctx, shang, xia, bianPos, '梅花时间起卦');
 }
 
+/** 数字起卦；第三个数字须为非负整数并按6取余决定动爻。 */
 export function meiHuaShuZiQiGua(ctx: DivinationContext, numbers: [number, number, number]): PaipanResult {
   let shang = numbers[0] % 8; if (shang === 0) shang = 8;
   let xia = numbers[1] % 8; if (xia === 0) xia = 8;

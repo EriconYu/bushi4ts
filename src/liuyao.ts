@@ -8,7 +8,7 @@ import { baGuaNumToYaos, yaosToBaGuaNum, yaoToYinYang, guaNumToName, guaNumToWuX
 import { getHuGuaYaos, getBianGuaYaos, get64GuaNameByYaos } from './gua_calc';
 import { getGuaEx, reloadLiuQin, getLiuShen } from './gua_ex_data';
 
-/** 将传统爻位（1=初爻，6=上爻）转换为数组索引（0=上爻，5=初爻）。 */
+/** 将传统爻位转换为数组索引（0=上爻，5=初爻）；0及6的倍数为上爻，其他值按6取余。 */
 export function movingLineIndex(yaoNumber: number): number {
   const normalized = ((yaoNumber - 1) % 6 + 6) % 6 + 1;
   return 6 - normalized;
@@ -67,6 +67,7 @@ export function liuYaoShiJianQiGua(ctx: DivinationContext): PaipanResult {
   return buildLiuyaoResult(ctx, shang, xia, bianPos, '六爻时间起卦');
 }
 
+/** 数字起卦；第三个数字须为非负整数并按6取余决定动爻。 */
 export function liuYaoShuZiQiGua(ctx: DivinationContext, numbers: [number, number, number]): PaipanResult {
   let shang = numbers[0] % 8; if (shang === 0) shang = 8;
   let xia = numbers[1] % 8; if (xia === 0) xia = 8;

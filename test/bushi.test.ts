@@ -89,13 +89,13 @@ describe('bushi4ts', () => {
     expect(multiple.bianGua?.yaos[3]).toBe(YAO_SHAO_YIN);
   });
 
-  test('数字起卦第三个数字独立决定初爻到上爻', () => {
+  test('数字起卦第三个数字按6取余决定动爻', () => {
     const ctx: DivinationContext = {
       ganZhi: ['丙午', '丙申', '甲寅', '乙亥'], xunKong: '子丑',
       lunarMonth: 6, lunarDay: 26,
     };
-    for (let yaoNumber = 1; yaoNumber <= 6; yaoNumber++) {
-      const expectedIndex = 6 - yaoNumber;
+    const cases: Array<[number, number]> = [[0, 0], [1, 5], [6, 0], [7, 5], [12, 0], [13, 5]];
+    for (const [yaoNumber, expectedIndex] of cases) {
       expect(movingLineIndex(yaoNumber)).toBe(expectedIndex);
       const liuYao = liuYaoShuZiQiGua(ctx, [1, 1, yaoNumber]);
       expect(liuYao.bianYao).toBe(expectedIndex);
