@@ -8,6 +8,12 @@ import { baGuaNumToYaos, yaosToBaGuaNum, yaoToYinYang, guaNumToName, guaNumToWuX
 import { getHuGuaYaos, getBianGuaYaos, get64GuaNameByYaos } from './gua_calc';
 import { getGuaEx, reloadLiuQin, getLiuShen } from './gua_ex_data';
 
+/** 将传统爻位（1=初爻，6=上爻）转换为数组索引（0=上爻，5=初爻）。 */
+export function movingLineIndex(yaoNumber: number): number {
+  const normalized = ((yaoNumber - 1) % 6 + 6) % 6 + 1;
+  return 6 - normalized;
+}
+
 /** 构建完整六爻排盘；bianPos 使用 0=上爻、5=初爻、-1=无动爻。 */
 export function buildLiuyaoResult(ctx: DivinationContext, shangGua: number, xiaGua: number, bianPos: number, method: string): PaipanResult {
   const shang = baGuaNumToYaos(shangGua);
@@ -57,22 +63,21 @@ export function liuYaoShiJianQiGua(ctx: DivinationContext): PaipanResult {
   const sumYMDH = sumYMD + hzNum;
   let shang = sumYMD % 8; if (shang === 0) shang = 8;
   let xia = sumYMDH % 8; if (xia === 0) xia = 8;
-  let bianPos = 6 - (sumYMDH % 6); if (bianPos === 6) bianPos = 0;
+  const bianPos = movingLineIndex(sumYMDH);
   return buildLiuyaoResult(ctx, shang, xia, bianPos, '六爻时间起卦');
 }
 
 export function liuYaoShuZiQiGua(ctx: DivinationContext, numbers: [number, number, number]): PaipanResult {
   let shang = numbers[0] % 8; if (shang === 0) shang = 8;
   let xia = numbers[1] % 8; if (xia === 0) xia = 8;
-  let bianPos = 6 - ((numbers[0]+numbers[1]+numbers[2]) % 6); if (bianPos === 6) bianPos = 0;
+  const bianPos = movingLineIndex(numbers[2]);
   return buildLiuyaoResult(ctx, shang, xia, bianPos, '六爻数字起卦');
 }
 
 export function liuYaoSuiJiQiGua(ctx: DivinationContext): PaipanResult {
-  const now = Date.now();
-  const n0 = Math.floor(now/1000) % 9 + 1;
-  const n1 = Math.floor(now/10000) % 9 + 1;
-  const n2 = Math.floor(now/100000) % 9 + 1;
+  const n0 = Math.floor(Math.random() * 8) + 1;
+  const n1 = Math.floor(Math.random() * 8) + 1;
+  const n2 = Math.floor(Math.random() * 6) + 1;
   return liuYaoShuZiQiGua(ctx, [n0, n1, n2]);
 }
 

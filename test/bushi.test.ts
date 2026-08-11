@@ -2,7 +2,7 @@
 // 作者：净志 | 微信：haitaojingzhi | 官网：https://www.buhuo.xin
 // 仅开源排盘算法，不含卦爻辞、解卦等内容。
 
-import { buildContext, liuYaoShiJianQiGua, meiHuaShiJianQiGua, liuYaoShouYaoQiGua, getBianGuaYaos, getGuaTexts, YAO_SHAO_YANG, YAO_SHAO_YIN, YAO_LAO_YANG, guaExMap, DivinationContext } from '../src';
+import { buildContext, liuYaoShiJianQiGua, meiHuaShiJianQiGua, liuYaoShuZiQiGua, meiHuaShuZiQiGua, liuYaoSuiJiQiGua, liuYaoShouYaoQiGua, meiHuaShouYaoQiGua, movingLineIndex, getBianGuaYaos, getGuaTexts, YAO_SHAO_YANG, YAO_SHAO_YIN, YAO_LAO_YANG, guaExMap, DivinationContext } from '../src';
 
 describe('bushi4ts', () => {
   test('GUAS64', () => {
@@ -87,6 +87,36 @@ describe('bushi4ts', () => {
     expect(multiple.bianYao).toBe(0);
     expect(multiple.bianGua?.yaos[0]).toBe(YAO_SHAO_YIN);
     expect(multiple.bianGua?.yaos[3]).toBe(YAO_SHAO_YIN);
+  });
+
+  test('数字起卦第三个数字独立决定初爻到上爻', () => {
+    const ctx: DivinationContext = {
+      ganZhi: ['丙午', '丙申', '甲寅', '乙亥'], xunKong: '子丑',
+      lunarMonth: 6, lunarDay: 26,
+    };
+    for (let yaoNumber = 1; yaoNumber <= 6; yaoNumber++) {
+      const expectedIndex = 6 - yaoNumber;
+      expect(movingLineIndex(yaoNumber)).toBe(expectedIndex);
+      const liuYao = liuYaoShuZiQiGua(ctx, [1, 1, yaoNumber]);
+      expect(liuYao.bianYao).toBe(expectedIndex);
+      expect(liuYao.benGua.yaos.flatMap((yao, index) => yao >= 3 ? [index] : [])).toEqual([expectedIndex]);
+      expect(meiHuaShuZiQiGua(ctx, [1, 1, yaoNumber]).bianYao).toBe(expectedIndex);
+    }
+    expect(liuYaoShuZiQiGua(ctx, [1, 1, 1]).bianGua?.name).toBe('天风姤');
+  });
+
+  test('随机与无动爻手摇的动爻契约', () => {
+    const ctx: DivinationContext = {
+      ganZhi: ['丙午', '丙申', '甲寅', '乙亥'], xunKong: '子丑',
+      lunarMonth: 6, lunarDay: 26,
+    };
+    for (let i = 0; i < 20; i++) {
+      const result = liuYaoSuiJiQiGua(ctx);
+      expect(result.bianYao).toBeGreaterThanOrEqual(0);
+      expect(result.bianYao).toBeLessThan(6);
+      expect(result.benGua.yaos.filter(yao => yao === 3 || yao === 4)).toHaveLength(1);
+    }
+    expect(meiHuaShouYaoQiGua(ctx, Array(6).fill(YAO_SHAO_YANG)).bianYao).toBe(-1);
   });
 
   test('内置卦爻辞可直接读取', () => {
