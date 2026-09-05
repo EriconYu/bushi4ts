@@ -116,6 +116,10 @@ describe('bushi4ts', () => {
       expect(result.bianYao).toBeLessThan(6);
       expect(result.benGua.yaos.filter(yao => yao === 3 || yao === 4)).toHaveLength(1);
     }
+    const staticLiuYao = liuYaoShouYaoQiGua(ctx, Array(6).fill(YAO_SHAO_YANG));
+    expect(staticLiuYao.bianYao).toBe(-1);
+    expect(staticLiuYao.bianGua).toBeNull();
+    expect(staticLiuYao.bianGuaEx).toBeNull();
     expect(meiHuaShouYaoQiGua(ctx, Array(6).fill(YAO_SHAO_YANG)).bianYao).toBe(-1);
   });
 

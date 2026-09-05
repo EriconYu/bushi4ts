@@ -99,25 +99,27 @@ export function liuYaoShouYaoQiGua(ctx: DivinationContext, yaos: number[]): Paip
   const huYaos = getHuGuaYaos(yaos);
   const huGua: GuaInfo = { name: get64GuaNameByYaos(huYaos), yaos: huYaos };
 
-  const bianYaos = getBianGuaYaos(yaos, -1);
-  const bianGua: GuaInfo = { name: get64GuaNameByYaos(bianYaos), yaos: bianYaos };
-
   const benGuaEx = getGuaEx(benGuaName);
-  const bianGuaExRaw = getGuaEx(bianGua.name);
+  let bianPos = -1;
+  for (let i = 0; i < yaos.length; i++) {
+    if (yaos[i] === YAO_LAO_YANG || yaos[i] === YAO_LAO_YIN) { bianPos = i; break; }
+  }
+
+  let bianGua: GuaInfo | null = null;
   let finalBianEx: GuaExData | null = null;
-  if (benGuaEx && bianGuaExRaw) {
-    const blq = reloadLiuQin(benGuaEx.wuXing, bianGuaExRaw.ganZhi);
-    finalBianEx = { ...bianGuaExRaw, liuQin: blq.join('') };
+  if (bianPos >= 0) {
+    const bianYaos = getBianGuaYaos(yaos, -1);
+    bianGua = { name: get64GuaNameByYaos(bianYaos), yaos: bianYaos };
+    const bianGuaExRaw = getGuaEx(bianGua.name);
+    if (benGuaEx && bianGuaExRaw) {
+      const blq = reloadLiuQin(benGuaEx.wuXing, bianGuaExRaw.ganZhi);
+      finalBianEx = { ...bianGuaExRaw, liuQin: blq.join('') };
+    }
   }
 
   let liuShen: string[] | null = null;
   if (ctx.ganZhi[2].length >= 1) {
     liuShen = getLiuShen(ctx.ganZhi[2][0]);
-  }
-
-  let bianPos = -1;
-  for (let i = 0; i < yaos.length; i++) {
-    if (yaos[i] === YAO_LAO_YANG || yaos[i] === YAO_LAO_YIN) { bianPos = i; break; }
   }
 
   return {
